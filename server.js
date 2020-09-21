@@ -5,6 +5,8 @@
 const express = require("express");
 const app = express();
 
+const lodash = require("lodash");
+
 //load the quotes JSON
 const quotes = require("./quotes.json");
 
@@ -17,6 +19,29 @@ app.get("/", function (request, response) {
 });
 
 //START OF YOUR CODE...
+
+//Returns ALL quotes
+app.get("/quotes", function (req, res) {
+  res.send(quotes);
+});
+
+//Returns ONE quote
+app.get("/quotes/random", function (req, res) {
+  //let randomQuote = pickFromArray(quotes);
+  let randomQuote = lodash.sample(quotes);
+  res.send(randomQuote);
+});
+
+//Searhes a quote
+app.get("/quotes/search", function (req, res) {
+  let searchTerm = req.query.term;
+
+  let searchQuotes = quotes.filter((quote) =>
+    quote.quote.toUpperCase().includes(searchTerm.toUpperCase())
+  );
+
+  res.json(searchQuotes);
+});
 
 //...END OF YOUR CODE
 
